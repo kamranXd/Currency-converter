@@ -62,3 +62,24 @@ body{
     font-weight: 700;
     margin-top: 20px;
 }
+
+/* Responsive Code */
+
+@media  screen and (max-width:400px) {
+    .converter-container{
+        width: 80%;
+        margin: 0 auto;
+    }
+    .converter-container h1{
+        font-size: 20px;
+    }
+    .converter-container .input-container{
+        border: none;
+    }
+    .converter-container .input-container input,
+    .converter-container .input-container select{
+        border: 1px solid#ccc;
+        margin-block: 3px;
+        width: 100%;
+    }
+}
