@@ -3,7 +3,7 @@ const convertedAmountElement = document.querySelector('.convertedAmount');
 const fromCurrencyElement = document.querySelector('.fromCurrency');
 const toCurrencyElement = document.querySelector('.toCurrency');
 const result = document.querySelector('.result');
-
+const convertedContainer = document.querySelector(".converter-container")
 //Array to populate the select tags with these countries
 const countries = [ 
     { code: "USD", name: "United States Dollar" },
@@ -44,6 +44,46 @@ countries.forEach(country =>{
     fromCurrencyElement.appendChild(options1);
     toCurrencyElement.appendChild(options2);
 
+    //Setting default values of select tag
     fromCurrencyElement.value = "USD";
     toCurrencyElement.value = "INR";
 });
+
+//Function to get exchange rate using API
+const getExchangeRate = async() =>{
+    const amount = parseFloat(fromAmountElement.value);
+    const fromCurrency = fromCurrencyElement.value;
+    const toCurrency = toCurrencyElement.value;
+    result.textContent = "Fetching Exchange rate..";
+
+    try{
+   //Fetching data from API
+   const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${fromCurrency}`);
+   const data = await response.json();
+
+   const conversionRate = data.rates[toCurrency];
+   const convertedAmount = (amount * conversionRate).toFixed(2);
+
+   if(typeof conversionRate === "undefined"){
+    result.textContent = "Exchange rate data is not available for selected country";
+    convertedAmountElement = " ";
+   } 
+  else{
+   convertedAmountElement.value = convertedAmount;
+   result.textContent = `${amount} ${fromCurrency} = ${convertedAmount} ${ toCurrency}`
+   }    
+}
+catch(error){
+    convertedContainer.innerHTML = `<h1>Error while fetching exchange rates!</h1>`;
+} 
+
+}
+ 
+
+//Fetching exchange rate when user input the amount
+fromAmountElement.addEventListener('input',getExchangeRate);
+
+//Fetching exchange rate when users change currency
+fromCurrencyElement.addEventListener('change',getExchangeRate);
+toCurrencyElement.addEventListener('change',getExchangeRate);
+window.addEventListener('load',getExchangeRate);
