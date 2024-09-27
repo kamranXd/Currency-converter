@@ -79,7 +79,6 @@ catch(error){
 
 }
  
-
 //Fetching exchange rate when user input the amount
 fromAmountElement.addEventListener('input',getExchangeRate);
 
